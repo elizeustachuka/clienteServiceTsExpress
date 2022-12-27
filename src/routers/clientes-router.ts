@@ -2,6 +2,8 @@ import express from 'express'
 import Cliente from '../models/cliente'
 import clientesRepository from '../repositories/clientes-repository'
 import validacep from '../utils/validacep'
+import { CustomError } from '../models/custom-error-model'
+import { HttpCode, HttpCodeMessage } from '../exceptions/AppError'
 
 const clientesRouter = express.Router()
 
@@ -10,12 +12,12 @@ clientesRouter.post('/clientes', async (req, res) => {
     const cep = req.body.cep
     let responseViaCep
 
-    if(validacep(cep.toString()) !== true) {
-        res.status(400).send(`CEP ${cep} invalid format`)
+    if(validacep(cep.toString()) == false) {
+        res.status(400).send(new CustomError(HttpCodeMessage.BAD_REQUEST, HttpCode.BAD_REQUEST, `Invalid format for CEP: ${cep} `))
     }
 
     if(cep == null) {
-        res.status(400).send(`CEP is null`)
+        res.status(400).send(new CustomError(HttpCodeMessage.BAD_REQUEST, HttpCode.BAD_REQUEST, `CEP is null`))
     }
 
     try {
@@ -24,8 +26,8 @@ clientesRouter.post('/clientes', async (req, res) => {
         
         responseViaCep = responseJson
 
-        } catch (err) {
-            res.status(502).send('Error with ViaCEP Connection')
+        } catch {
+            res.status(502).send(new CustomError(HttpCodeMessage.BAD_GATEWAY, HttpCode.BAD_GATEWAY, `Error with ViaCEP Connection`))
     }
 
     let clienteCreate = new Cliente()
@@ -61,8 +63,8 @@ clientesRouter.get('/clientes/viacep/:cep', async (req, res) => {
 
     const cep: number = +req.params.cep
 
-    if(validacep(cep.toString()) !== true) {
-        res.status(400).send(`CEP ${cep} invalid format`)
+    if(validacep(cep.toString()) == false) {
+        res.status(400).send(new CustomError(HttpCodeMessage.BAD_REQUEST, HttpCode.BAD_REQUEST, `CEP is null`))
     }
 
     try {
@@ -71,7 +73,7 @@ clientesRouter.get('/clientes/viacep/:cep', async (req, res) => {
         
         res.send(apiResponseJson)} catch (err) {
             console.log(err)
-            res.status(502).send('Error with ViaCEP Connection')
+            res.status(502).send(new CustomError(HttpCodeMessage.BAD_GATEWAY, HttpCode.BAD_GATEWAY, `Error with ViaCEP Connection`))
     }
 })
 
@@ -82,7 +84,7 @@ clientesRouter.get('/clientes/:id', (req, res) => {
         if (cliente) {
             res.json(cliente)
         } else {
-            res.status(404).send()
+            res.status(404).send(new CustomError(HttpCodeMessage.NOT_FOUND, HttpCode.NOT_FOUND, `Cliente with id: ${id} not found`))
         }
     })
 })
@@ -93,12 +95,12 @@ clientesRouter.put('/clientes/:id', async (req, res) => {
 
     let responseViaCep
 
-    if(validacep(cep.toString()) !== true) {
-        res.status(400).send(`CEP ${cep} invalid format`)
+    if(validacep(cep.toString()) == false) {
+        res.status(404).send(new CustomError(HttpCodeMessage.NOT_FOUND, HttpCode.NOT_FOUND, `Cliente with id: ${id} not found`))
     }
 
     if(cep == null) {
-        res.status(400).send(`CEP is null`)
+        res.status(400).send(new CustomError(HttpCodeMessage.BAD_REQUEST, HttpCode.BAD_REQUEST, `CEP is null`))
     }
 
     try {
@@ -125,7 +127,7 @@ clientesRouter.put('/clientes/:id', async (req, res) => {
 
     clientesRepository.atualizar(id, clienteUpdate, (notFound) => {
         if (notFound) {
-            res.status(404).send()
+            res.status(404).send(new CustomError(HttpCodeMessage.NOT_FOUND, HttpCode.NOT_FOUND, `Cliente with id: ${id} not found`))
         } else {
             res.status(204).send()
         }
@@ -137,7 +139,7 @@ clientesRouter.delete('/clientes/:id', (req, res) => {
 
     clientesRepository.apagar(id, (notFound) => {
         if (notFound) {
-            res.status(404).send()
+            res.status(404).send(new CustomError(HttpCodeMessage.NOT_FOUND, HttpCode.NOT_FOUND, `Cliente with id: ${id} not found`))
         } else {
             res.status(204).send()
         }
