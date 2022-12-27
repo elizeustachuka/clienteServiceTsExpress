@@ -27,7 +27,7 @@ const clientesRepository = {
 
     atualizar: (id: number, cliente: Cliente, callback: (notFound: boolean) => void) => {
         const sql = 'UPDATE clientes SET nome = ?, cpf = ?, email = ?, cep = ?, numero = ?, rua = ?, bairro = ?, cidade = ?, estado = ? WHERE id = ?'
-        const params = [cliente.nome, cliente.cpf, cliente.email, cliente.cep, id]
+        const params = [cliente.nome, cliente.cpf, cliente.email, cliente.cep, cliente.numero, cliente.rua, cliente.bairro, cliente.cidade, cliente.estado, id]
         database.run(sql, params, function(_err) {
             callback(this.changes === 0)
         })

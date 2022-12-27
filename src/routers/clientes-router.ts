@@ -14,6 +14,10 @@ clientesRouter.post('/clientes', async (req, res) => {
         res.status(400).send(`CEP ${cep} invalid format`)
     }
 
+    if(cep == null) {
+        res.status(400).send(`CEP is null`)
+    }
+
     try {
         const apiResponse = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
         const responseJson = await apiResponse.json()
@@ -83,10 +87,43 @@ clientesRouter.get('/clientes/:id', (req, res) => {
     })
 })
 
-clientesRouter.put('/clientes/:id', (req, res) => {
+clientesRouter.put('/clientes/:id', async (req, res) => {
     const id: number = +req.params.id
+    const cep: number = +req.body.cep
 
-    clientesRepository.atualizar(id, req.body, (notFound) => {
+    let responseViaCep
+
+    if(validacep(cep.toString()) !== true) {
+        res.status(400).send(`CEP ${cep} invalid format`)
+    }
+
+    if(cep == null) {
+        res.status(400).send(`CEP is null`)
+    }
+
+    try {
+        const apiResponse = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        const responseJson = await apiResponse.json()
+        
+        responseViaCep = responseJson
+
+        } catch (err) {
+            res.status(502).send('Error with ViaCEP Connection')
+    }
+
+    let clienteUpdate = new Cliente()
+
+    clienteUpdate.nome = req.body.nome
+    clienteUpdate.cpf = req.body.cep
+    clienteUpdate.email = req.body.email
+    clienteUpdate.cep = req.body.cep
+    clienteUpdate.numero = req.body.numero
+    clienteUpdate.rua = responseViaCep?.logradouro;
+    clienteUpdate.bairro = responseViaCep?.bairro;
+    clienteUpdate.cidade = responseViaCep?.localidade;
+    clienteUpdate.estado = responseViaCep?.uf;
+
+    clientesRepository.atualizar(id, clienteUpdate, (notFound) => {
         if (notFound) {
             res.status(404).send()
         } else {
