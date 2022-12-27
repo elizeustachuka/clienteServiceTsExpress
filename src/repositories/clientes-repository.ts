@@ -4,9 +4,9 @@ import database from './database'
 const clientesRepository = {
 
     criar: (cliente: Cliente, callback: (id?: number) => void) => {
-        const sql = 'INSERT INTO clientes (nome, cpf, email, cep) VALUES (?, ?, ?, ?)'
+        const sql = 'INSERT INTO clientes (nome, cpf, email, cep, numero, rua, bairro, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
         
-        const params = [cliente.nome, cliente.cpf, cliente.email, cliente.cep]
+        const params = [cliente.nome, cliente.cpf, cliente.email, cliente.cep, cliente.numero, cliente.rua, cliente.bairro, cliente.cidade, cliente.estado]
        
         database.run(sql, params, function(_err) {
             callback(this?.lastID)
@@ -26,7 +26,7 @@ const clientesRepository = {
     },
 
     atualizar: (id: number, cliente: Cliente, callback: (notFound: boolean) => void) => {
-        const sql = 'UPDATE clientes SET nome = ?, cpf = ?, email = ?, cep = ? WHERE id = ?'
+        const sql = 'UPDATE clientes SET nome = ?, cpf = ?, email = ?, cep = ?, numero = ?, rua = ?, bairro = ?, cidade = ?, estado = ? WHERE id = ?'
         const params = [cliente.nome, cliente.cpf, cliente.email, cliente.cep, id]
         database.run(sql, params, function(_err) {
             callback(this.changes === 0)

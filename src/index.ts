@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api', clientesRouter)
 
 app.use(cors({
-    origin:['http://localhost:30000']
+    origin:['http://localhost:3000']
 }))
 
 app.use((req, res) => {

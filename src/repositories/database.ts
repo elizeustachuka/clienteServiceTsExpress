@@ -7,7 +7,12 @@ const SQL_CLIENTES_CREATE = `
         nome TEXT,
         cpf TEXT,
         email TEXT,
-        cep TEXT
+        cep TEXT,
+        numero INTEGER,
+        rua TEXT,
+        bairro TEXT,
+        cidade TEXT,
+        estado TEXT
     )`
 
 
