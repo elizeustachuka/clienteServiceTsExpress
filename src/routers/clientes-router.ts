@@ -1,6 +1,5 @@
 import express from 'express'
 import Cliente from '../models/cliente'
-import Endereco from '../models/endereco'
 import clientesRepository from '../repositories/clientes-repository'
 import validacep from '../utils/validacep'
 
