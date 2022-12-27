@@ -14,11 +14,11 @@ As seguintes ferramentas estão sendo usadas na construção do projeto:
 
 ### 🏷️ Features
 - [x] Microserviço REST desenvolvido em TypeScript com Express.
-- [ ] Pipeline no GitHub.
 - [ ] Integração com viaCEP.
 - [ ] Tratamento de Exceptions caso o VIA CEP esteja indisponível.
 - [ ] Testes unitarios.
 - [ ] Testes de mutação.
+- [ ] Pipeline no GitHub.
 - [ ] SonarCube.
 - [ ] Autenticação na API.
 - [ ] Documentação e Swager.
