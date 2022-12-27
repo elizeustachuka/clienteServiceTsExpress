@@ -14,7 +14,7 @@ As seguintes ferramentas estão sendo usadas na construção do projeto:
 
 ### 🏷️ Features
 - [x] Microserviço REST desenvolvido em TypeScript com Express.
-- [ ] Integração com viaCEP.
+- [x] Integração com viaCEP.
 - [ ] Tratamento de Exceptions caso o VIA CEP esteja indisponível.
 - [ ] Testes unitarios.
 - [ ] Testes de mutação.
