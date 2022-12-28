@@ -1,7 +1,5 @@
 <h4 align="center"> 🚧  API de Clientes usando TypeScript, Express, Node.js 🚀 Em construção...  🚧</h4>
 
-[![Main workflow](https://github.com/elizeustachuka/cliente/actions/workflows/cicd-config.yml/badge.svg)](https://github.com/elizeustachuka/cliente/blob/main/.github/workflows/cicd-config.yml)
-
 API de Teste com implementação da pirâmide de testes proposta por Martin Fowler para Microserviços.
 
 ### 🛠 Tecnologias
